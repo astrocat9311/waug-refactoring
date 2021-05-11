@@ -31,14 +31,12 @@ class UserSignupView(View):
 
                 user, is_new = User.objects.get_or_create(
                     email = email,
-                    password = password,
+                    password = hashed_password,
                     name = name,
                 )
                 if is_new:
                     coupon = Coupon.objects.get(name='new member welcome')
                     UserCoupon.objects.create(code=get_random_string(length=10), user=user, coupon=coupon)
-                else:
-                    pass
 
             return JsonResponse({'message':'SIGN_UP_SUCCESS'}, status=201)
 
@@ -83,9 +81,8 @@ class CouponView(View):
         name          = data['name']
         discount_rate = data['discount_rate']
 
-        Coupon.objecets.create(
+        Coupon.objects.create(
             name          = name,
             discount_rate = discount_rate,
-            code          = get_random_string(length=10)
         )
         return JsonResponse({'message':'COUPON_ISSUED'},status=201)
