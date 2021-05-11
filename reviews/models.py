@@ -1,7 +1,7 @@
 from django.db import models
 
 class Review(models.Model):
-    dinning     = models.ForeignKey('product.Dinning', on_delete=models.CASCADE)
+    dinning     = models.ForeignKey('products.Dinning', on_delete=models.CASCADE)
     user        = models.ForeignKey('users.User', on_delete=models.CASCADE)
     comment     = models.TextField()
     star_review = models.SmallIntegerField(default=0)

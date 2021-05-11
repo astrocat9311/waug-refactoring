@@ -9,7 +9,6 @@ class User(models.Model):
     phone_number = models.CharField(max_length=45, null=True)
     image_url    = models.URLField(max_length=2000, null=True)
     coupon       = models.ManyToManyField('Coupon', through='UserCoupon')
-    wishlist     = models.ManyToManyField('Product', through='Wishlist')
 
     class Meta:
         db_table = 'users'
@@ -33,7 +32,7 @@ class UserCoupon(models.Model):
 
 class Wishlist(models.Model):
     user    = models.ForeignKey('User', on_delete=models.CASCADE)
-    product = models.ForeignKey('Product',on_delete=models.CASCADE)
+    product = models.ForeignKey('products.Product',on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'wishlists'
