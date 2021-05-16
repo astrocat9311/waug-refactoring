@@ -32,7 +32,7 @@ class UserCoupon(models.Model):
         db_table = 'user_coupons'
 
 class Wishlist(models.Model):
-    user    = models.ForeignKey('User', on_delete=models.CASCADE)
+    user    = models.ForeignKey('User',on_delete=models.CASCADE)
     product = models.ForeignKey('products.Product',on_delete=models.CASCADE)
 
     class Meta:
