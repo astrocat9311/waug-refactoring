@@ -2,7 +2,7 @@ from django.db import models
 from datetime  import datetime,timedelta
 
 class User(models.Model):
-    email        = models.EmailField(max_length=100)
+    email        = models.EmailField(max_length=45)
     password     = models.CharField(max_length=500)
     name         = models.CharField(max_length=45)
     last_name    = models.CharField(max_length=45, null=True)
@@ -17,6 +17,7 @@ class User(models.Model):
 class Coupon(models.Model):
     name          = models.CharField(max_length=45)
     discount_rate = models.DecimalField(max_digits=10, decimal_places=1)
+    code = models.CharField(max_length=45, default=None)
     created_at    = models.DateTimeField(auto_now_add=True)
     expire_date   = models.DateTimeField(default=datetime.now() + timedelta(days=30))
 
@@ -26,7 +27,6 @@ class Coupon(models.Model):
 class UserCoupon(models.Model):
     user   = models.ForeignKey('User',on_delete=models.CASCADE)
     coupon = models.ForeignKey('Coupon',on_delete=models.CASCADE)
-    code   = models.CharField(max_length=45,default=None)
 
     class Meta:
         db_table = 'user_coupons'

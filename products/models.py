@@ -42,9 +42,9 @@ class RoomType(models.Model):
         db_table = 'room_types'
 
 class Room(models.Model):
-    star_rating = models.SmallIntegerField(default=0)
-    room_type   = models.ForeignKey('RoomType', on_delete=models.SET_NULL,null=True)
-    convenience = models.ManyToManyField('Convenience', through='RoomConvenience')
+    grade   = models.SmallIntegerField(default=0)
+    type    = models.ForeignKey('RoomType', on_delete=models.SET_NULL,null=True)
+    service = models.ManyToManyField('Service', through='RoomService')
 
     class Meta:
         db_table = 'rooms'
@@ -55,20 +55,20 @@ class ServiceType(models.Model):
     class Meta:
         db_table = 'service_types'
 
-class Convenience(models.Model):
+class Service(models.Model):
     name         = models.CharField(max_length=45)
     service_type = models.ForeignKey('ServiceType', on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        db_table = 'conveniences'
+        db_table = 'services'
 
-class RoomConvenience(models.Model):
+class RoomService(models.Model):
     service_type = models.ForeignKey('ServiceType', on_delete=models.CASCADE)
-    convenience  = models.ForeignKey('Convenience', on_delete=models.CASCADE)
+    service      = models.ForeignKey('Service', on_delete=models.CASCADE)
     room         = models.ForeignKey('Room', on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'room_conveniences'
+        db_table = 'room_services'
 
 class DinningType(models.Model):
     name = models.CharField(max_length=45)
@@ -76,51 +76,52 @@ class DinningType(models.Model):
     class Meta:
         db_table = 'dinning_types'
 
-class FoodType(models.Model):
-    name = models.CharField(max_length=45)
-
-    class Meta:
-        db_table = 'food_types'
-
-class Dinning(models.Model):
-    dinning_type = models.ForeignKey('DinningType', on_delete=models.SET_NULL, null=True)
-    food_type    = models.ForeignKey('FoodType', on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        db_table = 'dinnings'
-
 class DinningOption(models.Model):
-    name        = models.CharField(max_length=45)
-    dinning     = models.ForeignKey('Dinning', on_delete=models.SET_NULL, null=True)
+    option = models.CharField(max_length=45)
 
     class Meta:
         db_table = 'dinning_options'
 
-class Product(models.Model):
-    name        = models.CharField(max_length=45)
-    rating      = models.DecimalField(max_digits=3,decimal_places=1)
-    description = models.TextField()
-    address     = models.CharField(max_length=100)
-    latitude    = models.DecimalField(max_digits=20, decimal_places=17)
-    longitude   = models.DecimalField(max_digits=20, decimal_places=17)
-    category    = models.ForeignKey('Category', on_delete=models.SET_NULL,null=True)
-    destination = models.ForeignKey('Destination', on_delete=models.SET_NULL,null=True)
-    city        = models.ForeignKey('City',on_delete=models.SET_NULL, null=True)
-    district    = models.ForeignKey('District', on_delete=models.SET_NULL,null=True)
-    price       = models.DecimalField(max_digits=18, decimal_places=2)
-    is_room     = models.BooleanField(default=False)
-    room        = models.ForeignKey('Room',on_delete=models.SET_NULL,null=True)
-    is_dinning  = models.BooleanField(default=False)
-    dinning     = models.ForeignKey('Dinning',on_delete=models.SET_NULL,null=True)
-    is_activity = models.BooleanField(default=False)
-    is_popular  = models.BooleanField(default=False)
+class ActivityType(models.Model):
+    name = models.CharField(max_length=45)
+
+    class Meta:
+        db_table = 'activity_types'
+
+class Room(models.Model):
+
+    name           = models.CharField(max_length=45)
+    rating         = models.DecimalField(max_digits=3,decimal_places=1)
+    grade          = models.DecimalField(max_digits=3,decimal_places=1)
+    description    = models.TextField()
+    address        = models.CharField(max_length=100)
+    latitude       = models.DecimalField(max_digits=20, decimal_places=17)
+    longitude      = models.DecimalField(max_digits=20, decimal_places=17)
+    category       = models.ForeignKey('Category', on_delete=models.SET_NULL,null=True)
+    destination    = models.ForeignKey('Destination', on_delete=models.SET_NULL,null=True)
+    city           = models.ForeignKey('City',on_delete=models.SET_NULL, null=True)
+    district       = models.ForeignKey('District', on_delete=models.SET_NULL,null=True)
+    price          = models.DecimalField(max_digits=18, decimal_places=2)
+
+class RoomImage(models.Model):
+    image_url = models.URLField(max_length=2000)
+    product = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = 'room_images'
+
+
+
+    is_dinning     = models.BooleanField(default=False,null=True)
+    dinning_type   = models.ForeignKey('DinningType',on_delete=models.SET_NULL,null=True)
+    dinning_option = models.ForeignKey('DinningOption',on_delete=models.SET_NULL,null=True)
+    is_activity    = models.BooleanField(default=False,null=True)
+    activity_type  = models.ForeignKey('ActivityType',on_delete=models.SET_NULL,null=True)
+    is_popular     = models.BooleanField(default=False)
+    product_type   = models.Choices
 
     class Meta:
         db_table = 'products'
 
-class ProductImage(models.Model):
-    image_url = models.URLField(max_length=2000)
-    product   = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True)
 
-    class Meta:
-        db_table = 'product_images'
+

@@ -3,8 +3,6 @@ my_settings.py
 .idea/
 utils.py
 
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
