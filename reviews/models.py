@@ -1,10 +1,10 @@
 from django.db import models
 
 class Review(models.Model):
-    dinning     = models.ForeignKey('products.Dinning', on_delete=models.CASCADE)
-    user        = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    comment     = models.TextField()
-    star_review = models.SmallIntegerField(default=0)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    user    = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    comment = models.TextField()
+    rating  = models.DecimalField(max_digits=3, decimal_places=1)
 
     class Meta:
         db_table = 'reviews'
