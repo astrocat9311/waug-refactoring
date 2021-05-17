@@ -37,7 +37,6 @@ class AreaView(View):
 
 class RoomDetailView(View):
     def get(self,request,room_id):
-        print(json.loads(request.body))
         room = Room.objects.get(id=room_id)
 
         data = {
