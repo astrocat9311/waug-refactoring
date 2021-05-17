@@ -43,16 +43,6 @@ class UserSignupView(View):
                 )
 
             return JsonResponse({'message': 'SIGN_UP_COMPLETE'}, status=201)
-                #user, is_new = User.objects.get_or_create(
-                #    email = email,
-                #    password = hashed_password,
-                #    name = name,
-                #)
-                #if is_new:
-                #    coupon = Coupon.objects.get(name='신규 회원가입 축하 쿠폰')
-                #    UserCoupon.objects.create(code=get_random_string(length=10), user=user, coupon=coupon)
-                #
-                #return JsonResponse({'message':'SIGN_UP_SUCCESS'}, status=201)
 
        except KeyError:
            return JsonResponse({'message':'KEY_ERROR'}, status=400)
@@ -123,13 +113,4 @@ class WishlistView(View):
         except:
             return JsonResponse({'message':'EMPTY_WISHLIST'}, status=201)
 
-
         return JsonResponse({'data':data},status=200)
-
-
-
-
-
-
-
-
