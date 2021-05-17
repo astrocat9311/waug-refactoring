@@ -37,7 +37,7 @@ class UserSignupView(View):
 
                 signup.coupon.add(
                     Coupon.objects.create(
-                        name='신규회원가입 쿠폰',
+                        name='신규회원가입 쿠폰', # name을 여기서 생성하는 것은 이상
                         discount_rate=3000,
                         code=get_random_string(length=20))
                 )

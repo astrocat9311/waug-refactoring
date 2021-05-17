@@ -24,16 +24,36 @@ class MainView(View):
            'area_list': area_data
        }
 
-       return JsonResponse(json.dumps(data),status=200)
+       return JsonResponse({'data':data},status=200)
 
 class AreaView(View):
     def get(self,request,area_id):
         area     = Area.objects.get(id=area_id)
-        rooms    = Area.room_set.all()
-        products = Area.product_set.all()
+        rooms    = area.room_set.all()
+        products = area.product_set.all()
 
+        room_list = [{
+            'name': room.name,
+            'image_url': room.roomimage_set.first().image_url,
+            'city': room.city.name,
+            'district':room.district.name,
+            'grade': room.grade.name,
+            'rating': room.rating,
+            'price': room.price
+        } for room in rooms]
 
-        return JsonResponse({'data':data},status=200)
+        product_list = [{
+            'name': product.name,
+            'image_url': product.productimage_set.first(),
+            'price':product.price,
+            'rating': product.rating,
+        } for product in products]
+
+        data = {
+            'room_list':room_list,
+            'product_list':product_list}
+
+        return JsonResponse(json.dumps(data),status=200)
 
 class RoomDetailView(View):
     def get(self,request,room_id):
