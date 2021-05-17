@@ -1,12 +1,11 @@
 import json
 
-from django.http            import JsonResponse
-from django.views           import View
-from .models                import Review,ReviewPhoto
-from products.models        import Product
-from utils                  import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from json                   import JSONDecodeError
+from django.http     import JsonResponse
+from django.views    import View
+from .models         import Review,ReviewPhoto
+from products.models import Product
+from utils           import login_required
+from json            import JSONDecodeError
 
 class ReviewPostView(View):
     @login_required
@@ -24,10 +23,11 @@ class ReviewPostView(View):
                     product = product
                    )
 
-            ReviewPhoto.objects.create(
-                image_url  = data['image_url'],
-                review_id = review.id
-            )
+            for image in data['image_url']:
+                ReviewPhoto.objects.create(
+                    image_url = image,
+                    review_id = review.id
+                )
 
             return JsonResponse({"message":"REVIEW_POSTED"},status=201)
 
@@ -45,10 +45,10 @@ class ReviewListView(View):
         try:
             product = Product.objects.get(id=product_id)
             data = [{
-               'user': review.user.name,
+               'user'     : review.user.name,
                'image_url': [image.image_url for image in review.reviewphoto_set.all()],
-               'comment': review.comment,
-               'rating': review.rating,
+               'comment'  : review.comment,
+               'rating'   : review.rating,
            } for review in product.review_set.all()]
 
             return JsonResponse({'data':data}, status=200)
@@ -58,19 +58,3 @@ class ReviewListView(View):
 
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'},status=400)
-
-
-
-
-       
-
-
-
-
-
-
-
-
-
-
-
