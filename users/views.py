@@ -61,6 +61,9 @@ class UserLoginView(View):
             if not email or not password:
                 return JsonResponse({'message':'CHECK_INPUTS'},status=400)
 
+            if not validate_email(email) or validate_password(password):
+                return JsonResponse({'message':'INVALID_INPUTS'},status=400)
+
             if not User.objects.filter(email=email).exists():
                 return HttpResponse(status=404)
 
@@ -71,9 +74,10 @@ class UserLoginView(View):
 
             if bcrypt.checkpw(password.encode('utf-8'),user.password.encode('utf-8')):
                 access_token = jwt.encode({'id':user.id},SECRET_KEY,algorithm)
-                return JsonResponse({'access_token':access_token, },status=200)
+                return JsonResponse({'access_token':access_token,'message':'LOG_IN_SUCCESS'},status=200)
 
-            return HttpResponse(status=403)
+            else:
+                return HttpResponse(status=403)
 
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'},status=400)
