@@ -21,7 +21,7 @@ class UserSignupView(View):
             password = data['password']
 
             if User.objects.filter(email=email).exists():
-                return JsonResponse({},status=401)
+                return JsonResponse({'message':'EMAIL_EXISTS'},status=409)
 
             if not email or not name or not password:
                 return JsonResponse({'message':'NO_INPUTS'},status=400)
@@ -43,16 +43,6 @@ class UserSignupView(View):
                 )
 
             return JsonResponse({'message': 'SIGN_UP_COMPLETE'}, status=201)
-                #user, is_new = User.objects.get_or_create(
-                #    email = email,
-                #    password = hashed_password,
-                #    name = name,
-                #)
-                #if is_new:
-                #    coupon = Coupon.objects.get(name='신규 회원가입 축하 쿠폰')
-                #    UserCoupon.objects.create(code=get_random_string(length=10), user=user, coupon=coupon)
-                #
-                #return JsonResponse({'message':'SIGN_UP_SUCCESS'}, status=201)
 
        except KeyError:
            return JsonResponse({'message':'KEY_ERROR'}, status=400)
@@ -74,16 +64,14 @@ class UserLoginView(View):
             if not User.objects.filter(email=email).exists():
                 return HttpResponse(status=404)
 
-            if not validate_email(email) or not validate_password(password):
-                return JsonResponse({'message':'INVALID_INPUTS'}, status=400)
-
             user = User.objects.get(email=email)
 
             if bcrypt.checkpw(password.encode('utf-8'),user.password.encode('utf-8')):
                 access_token = jwt.encode({'id':user.id},SECRET_KEY,algorithm)
-                return JsonResponse({'access_token':access_token, },status=200)
+                return JsonResponse({'access_token':access_token,'message':'LOG_IN_SUCCESS'},status=200)
 
-            return HttpResponse(status=403)
+            else:
+                return HttpResponse(status=403)
 
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'},status=400)
@@ -123,13 +111,4 @@ class WishlistView(View):
         except:
             return JsonResponse({'message':'EMPTY_WISHLIST'}, status=201)
 
-
         return JsonResponse({'data':data},status=200)
-
-
-
-
-
-
-
-
