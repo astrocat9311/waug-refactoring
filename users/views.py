@@ -21,7 +21,7 @@ class UserSignupView(View):
             password = data['password']
 
             if User.objects.filter(email=email).exists():
-                return JsonResponse({},status=401)
+                return JsonResponse({'message':'EMAIL_EXISTS'},status=409)
 
             if not email or not name or not password:
                 return JsonResponse({'message':'NO_INPUTS'},status=400)
@@ -61,14 +61,8 @@ class UserLoginView(View):
             if not email or not password:
                 return JsonResponse({'message':'CHECK_INPUTS'},status=400)
 
-            if not validate_email(email) or validate_password(password):
-                return JsonResponse({'message':'INVALID_INPUTS'},status=400)
-
             if not User.objects.filter(email=email).exists():
                 return HttpResponse(status=404)
-
-            if not validate_email(email) or not validate_password(password):
-                return JsonResponse({'message':'INVALID_INPUTS'}, status=400)
 
             user = User.objects.get(email=email)
 

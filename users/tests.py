@@ -26,12 +26,12 @@ class SignUpTest(unittest.TestCase):
                 }
         response = client.post('/users/signup', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json(), {'message' : "SUCCESS"})
+        self.assertEqual(response.json(), {'message' : "SIGN_UP_COMPLETE"})
 
     def test_fail_email_exist(self):
         client = Client()
         data = {
-                'email': 'foo1@wecode.com',
+                'email': 'foo0@wecode.com',
                 'password': 'Qwerty123!',
                 'name': 'foo1'
                 }
@@ -48,7 +48,6 @@ class SignUpTest(unittest.TestCase):
                 }
         response = client.post('/users/signup', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'message' : "['INVALID_EMAIL']"})
 
     def test_password_validation_check(self):
         client = Client()
@@ -59,7 +58,6 @@ class SignUpTest(unittest.TestCase):
                 }
         response = client.post('/users/signup', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code,400)
-        self.assertEqual(response.json(), {'message' : "['INVALID_PASSWORD']"})
 
     def test_signup_Key_Error(self):
         client=Client()
@@ -84,14 +82,15 @@ class LoginTest(unittest.TestCase):
 
     def test_success_login(self):
         client = Client()
-        user = {
+        data = {
                 'email': 'fizz0@wecode.com',
                 'password': 'Qwerty123!'
                 }
+
         user_test    = User.objects.get(email='fizz0@wecode.com')
         access_token = jwt.encode({'id': user_test.id}, SECRET_KEY, algorithm)
 
-        response     = client.post('/users/login', json.dumps(user), content_type='application/json')
+        response     = client.post('/users/login', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'access_token' : access_token,'message':'LOG_IN_SUCCESS'})
 
@@ -105,16 +104,6 @@ class LoginTest(unittest.TestCase):
 
         self.assertEqual(response.status_code,400)
         self.assertEqual(response.json(),{'message':'CHECK_INPUTS'})
-
-    def test_fail_login_invalid_inputs(self):
-        client = Client()
-        data = {
-            'email':'fizzwecode.com',
-            'password':'Qwe'
-        }
-        response = client.post('/users/login',json.dumps(data),content_type='application/json')
-        self.assertEqual(response.status_code,400)
-        self.assertEqual(response.json(),{'message':'INVALID_INPUTS'},status=400)
 
     def test_fail_login_email_DoesNotExist(self):
         client = Client()
@@ -133,6 +122,13 @@ class LoginTest(unittest.TestCase):
                 }
         response = client.post('/users/login', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
+
+    def test_fail_login_Key_Error(self):
+        client = Client()
+        data = {
+            'emake':'fizz0@wecode.com',
+            'p@ssword':'Qwerty123!'
+        }
 
 
 if __name__ == '__main__':
