@@ -3,6 +3,7 @@ my_settings.py
 .idea/
 utils.py
 db_upload
+..git
 
 
 # Byte-compiled / optimized / DLL files
