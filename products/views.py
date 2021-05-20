@@ -6,31 +6,30 @@ from .models      import (Category,Area,City,District,RoomType,
                           ProductType,Product,ProductImage,ProductOption)
 from django.http  import JsonResponse
 
-class MainView(View):
+class CategoryView(View):
     def get(self,request):
 
-       category_data = [{
+       data = [{
            'name'     : category.name,
            'image_url': category.image_url
        } for category in Category.objects.all()]
 
-       area_data = [{
-           'name': area.name,
-           'image_url': area.image_url
-       } for area in Area.objects.all()]
-
-       data = {
-           'category_list': category_data,
-           'area_list': area_data
-       }
-
        return JsonResponse({'data':data},status=200)
 
 class AreaView(View):
+    def get(self,request):
+
+        data = [{
+            'name': area.name,
+            'image_url': area.image_url,
+        } for area in Area.objects.all()]
+
+        return JsonResponse({'data':data},status=200)
+
+class RoomView(View):
     def get(self,request,area_id):
         area     = Area.objects.get(id=area_id)
         rooms    = area.room_set.all()
-        products = area.product_set.all()
 
         room_list = [{
             'name': room.name,
@@ -42,6 +41,13 @@ class AreaView(View):
             'price': room.price
         } for room in rooms]
 
+        return JsonResponse(json.dumps(room_list),status=200)
+
+class ProductView(View):
+    def get(self,request,area_id):
+        area = Area.objects.get(id=area_id)
+        products = area.product_set.all()
+
         product_list = [{
             'name': product.name,
             'image_url': product.productimage_set.first(),
@@ -49,14 +55,11 @@ class AreaView(View):
             'rating': product.rating,
         } for product in products]
 
-        data = {
-            'room_list':room_list,
-            'product_list':product_list}
-
-        return JsonResponse(json.dumps(data),status=200)
+        return JsonResponse(json.dumps(product_list),status=200)
 
 class RoomDetailView(View):
     def get(self,request,room_id):
+
         room = Room.objects.get(id=room_id)
 
         data = {
@@ -83,37 +86,19 @@ class ProductsDetailView(View):
         product = Product.objects.get(id=product_id)
 
         data = {
-            'name': product.name,
-            'rating': product.rating,
+            'name'       : product.name,
+            'rating'     : product.rating,
             'description': product.description,
-            'address': product.address,
-            'latitude': product.latitude,
-            'longitude': product.longitude,
-            'category': product.category.name,
-            'area': product.area.name,
-            'city': product.city.name,
-            'district': product.district.name,
-            'price': product.price,
-            'type': product.type.name
+            'address'    : product.address,
+            'latitude'   : product.latitude,
+            'longitude'  : product.longitude,
+            'category'   : product.category.name,
+            'area'       : product.area.name,
+            'city'       : product.city.name,
+            'district'   : product.district.name,
+            'price'      : product.price,
+            'type'       : product.type.name,
+            'image_url'  : [image.image_url for image in product.productimage_set.all()]
         }
 
         return JsonResponse({'data':data},status=200)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

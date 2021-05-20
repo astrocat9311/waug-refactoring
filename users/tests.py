@@ -6,7 +6,6 @@ from django.test import (TestCase,Client)
 from .models     import User
 from my_settings import SECRET_KEY, algorithm
 
-
 class SignUpTest(unittest.TestCase):
     def setUp(self):
         User.objects.create(
@@ -129,7 +128,6 @@ class LoginTest(unittest.TestCase):
             'emake':'fizz0@wecode.com',
             'p@ssword':'Qwerty123!'
         }
-
 
 if __name__ == '__main__':
     unittest.main()
