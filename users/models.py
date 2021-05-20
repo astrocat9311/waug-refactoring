@@ -10,6 +10,7 @@ class User(models.Model):
     phone_number = models.CharField(max_length=45, null=True)
     image_url    = models.URLField(max_length=2000, null=True)
     coupon       = models.ManyToManyField('Coupon', through='UserCoupon')
+    is_social    = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'users'
