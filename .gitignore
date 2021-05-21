@@ -4,8 +4,8 @@ my_settings.py
 utils.py
 db_upload/
 ..git/
-.csv
-
+service_types.csv
+.DS_Store
 
 
 
