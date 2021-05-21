@@ -7,8 +7,6 @@ db_upload/
 service_types.csv
 .DS_Store
 
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]ß

@@ -1,15 +1,17 @@
 import bcrypt
 import jwt
 import json
+import requests
 
 from django.http            import JsonResponse, HttpResponse
+from django.shortcuts       import redirect
 from django.views           import View
 from django.core.exceptions import ValidationError
 from django.utils.crypto    import get_random_string
 
 from utils           import validate_email,validate_password,login_required
 from users.models    import User, Coupon, Wishlist
-from my_settings     import SECRET_KEY,algorithm
+from my_settings     import SECRET_KEY,algorithm,KAKAO_KEY
 
 class UserSignupView(View):
     def post(self,request):
@@ -112,3 +114,63 @@ class WishlistView(View):
             return JsonResponse({'message':'EMPTY_WISHLIST'}, status=201)
 
         return JsonResponse({'data':data},status=200)
+
+class KakaoLoginView(View):
+    def get(self,request):
+        client_id    = KAKAO_KEY
+        redirect_uri = "http://127.0.0.1:8000/users/kakao/login/callback"
+
+        return redirect(
+            f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+        )
+
+
+class KakaoLoginCallbackView(View):
+    def get(self,request):
+         
+        print(request.GET)
+        code          = request.GET.get("code")
+        client_id     = KAKAO_KEY
+        redirect_uri  = "http://127.0.0.1:8000/users/kakao/login/callback"
+        token_request = requests.get(
+            f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&\
+                redirect_uri={redirect_uri}&code={code}"
+        )
+        token_json = token_request.json()
+        error      = token_json.get("error",None)
+        print(error)
+
+        if error is not None:
+            return JsonResponse({'message':'INVALID_CODE'},status=400)
+        else:
+            access_token = token_json.get("access_token")
+        print(access_token)
+        profile_request = requests.get(
+            "https://kapi.kakao.com/v2/user/me", headers={"Authorization": f"Bearer {access_token}"}
+        )
+        #### call-back view는 이까지가 프론트에서 처리합니다.
+
+        profile_json = profile_request.json()
+        print(profile_json)
+
+        kakao_account = profile_json.get("kakao_account")
+        email = kakao_account.get("email",None)
+        print(email)
+        kakao_id = profile_json.get("id")
+        print(kakao_id)
+
+        if User.objects.filter(social_account = kakao_id).exists():
+            user_kakao = User.objects.get(social_account = kakao_id)
+            token = jwt.encode({"email":email},SECRET_KEY,algorithm)
+
+            return JsonResponse({"message":"KAKAO_LOGIN_SUCCESS","token":token},status=200)
+
+        else:
+            User(social_account = kakao_id,
+                 email=email,
+                 is_social = True).save()
+
+
+            token = jwt.encode({"email":email},SECRET_KEY,algorithm)
+
+            return JsonResponse({"token":token},status=200)

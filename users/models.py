@@ -2,14 +2,16 @@ from django.db import models
 from datetime  import datetime,timedelta
 
 class User(models.Model):
-    email        = models.EmailField(max_length=45)
-    password     = models.CharField(max_length=500)
-    name         = models.CharField(max_length=45)
-    last_name    = models.CharField(max_length=45, null=True)
-    first_name   = models.CharField(max_length=45, null=True)
-    phone_number = models.CharField(max_length=45, null=True)
-    image_url    = models.URLField(max_length=2000, null=True)
-    coupon       = models.ManyToManyField('Coupon', through='UserCoupon')
+    email          = models.EmailField(max_length=45)
+    password       = models.CharField(max_length=500)
+    name           = models.CharField(max_length=45)
+    last_name      = models.CharField(max_length=45, null=True)
+    first_name     = models.CharField(max_length=45, null=True)
+    phone_number   = models.CharField(max_length=45, null=True)
+    image_url      = models.URLField(max_length=2000, null=True)
+    coupon         = models.ManyToManyField('Coupon', through='UserCoupon')
+    is_social      = models.BooleanField(default=False)
+    social_account = models.CharField(max_length=100,null=True)
 
     class Meta:
         db_table = 'users'
