@@ -117,7 +117,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     image_url = models.URLField(max_length=2000)
-    product  = models.ForeignKey('Product', on_delete=models.CASCADE)
+    product   = models.ForeignKey('Product', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'product_images'
