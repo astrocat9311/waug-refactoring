@@ -3,24 +3,27 @@ import json
 from django.http     import JsonResponse
 from django.views    import View
 from .models         import Review,ReviewPhoto
+from users.models    import User
 from products.models import Product
 from utils           import login_required
 from json            import JSONDecodeError
 
+
 class ReviewPostView(View):
-    @login_required
+    #@login_required
     def post(self,request):
         try:
             data    = json.loads(request.body)
-            user    = request.user
+            #user    = request.user
+            user = User.objects.get(name='jane')
             print(user.id)
             product = Product.objects.get(id=data['product_id'])
 
             review = Review.objects.create(
-                    user    = user,
+                    user_id = user.id,
                     comment = data['comment'],
                     rating  = data['rating'],
-                    product = product
+                    product_id = data['product_id']
                    )
 
             for image in data['image_url']:
