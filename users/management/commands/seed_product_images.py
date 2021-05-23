@@ -17,11 +17,11 @@ class Command(BaseCommand):
         number = options.get('number')
 
         seeder = Seed.seeder()
-        fake = Faker(["ko_KR"])
+        fake   = Faker(["ko_KR"])
 
         seeder.add_entity(ProductImage, 100, {
-            'image_url': fake.image_url,
-            'product': random.choice(Product.objects.all())
+            'image_url': lambda x: fake.image_url,
+            'product'  : random.choice(Product.objects.all())
         })
         seeder.execute()
 

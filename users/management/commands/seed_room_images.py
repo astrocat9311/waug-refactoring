@@ -17,11 +17,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         number = options.get('number')
         seeder = Seed.seeder()
-        fake = Faker(["ko_KR"])
+        fake   = Faker(["ko_KR"])
 
         seeder.add_entity(RoomImage, 100, {
             'image_url': lambda x: fake.image_url,
-            'room': random.choice(Room.objects.all())
+            'room'     : random.choice(Room.objects.all())
         })
         seeder.execute()
 

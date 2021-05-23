@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         number = options.get('number')
         seeder = Seed.seeder()
-        fake = Faker(["ko_KR"])
+        fake   = Faker(["ko_KR"])
 
         seeder.add_entity(ProductType, 10, {
             'name': lambda x: fake.word()

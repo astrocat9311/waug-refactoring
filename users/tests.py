@@ -30,9 +30,9 @@ class SignUpTest(unittest.TestCase):
     def test_fail_email_exist(self):
         client = Client()
         data = {
-                'email': 'foo0@wecode.com',
+                'email'   : 'foo0@wecode.com',
                 'password': 'Qwerty123!',
-                'name': 'foo1'
+                'name'    : 'foo1'
                 }
         response = client.post('/users/signup', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 409)
@@ -41,9 +41,9 @@ class SignUpTest(unittest.TestCase):
     def test_email_validation_check(self):
         client = Client()
         data = {
-                'email' : 'foogmail.com',
+                'email'    : 'foogmail.com',
                 'password' : 'Qwerty123!',
-                'name': 'foo'
+                'name'     : 'foo'
                 }
         response = client.post('/users/signup', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 400)
@@ -51,9 +51,9 @@ class SignUpTest(unittest.TestCase):
     def test_password_validation_check(self):
         client = Client()
         data = {
-                'email':'foo2@gmail.com',
+                'email'   :'foo2@gmail.com',
                 'password':'qreq',
-                'name':'foo2'
+                'name'    :'foo2'
                 }
         response = client.post('/users/signup', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code,400)
@@ -61,9 +61,9 @@ class SignUpTest(unittest.TestCase):
     def test_signup_Key_Error(self):
         client=Client()
         data = {
-            'emake': 'foo3@gmail.com',
+            'emake'  : 'foo3@gmail.com',
             'passwor':'Qwerty123!',
-            'nam':'foo3'
+            'nam'    :'foo3'
         }
         response = client.post('/users/signup',json.dumps(data),content_type='application/json')
         self.assertEqual(response.status_code,400)
@@ -82,7 +82,7 @@ class LoginTest(unittest.TestCase):
     def test_success_login(self):
         client = Client()
         data = {
-                'email': 'fizz0@wecode.com',
+                'email'   : 'fizz0@wecode.com',
                 'password': 'Qwerty123!'
                 }
 
@@ -96,8 +96,8 @@ class LoginTest(unittest.TestCase):
     def test_fail_login_no_inputs(self):
         client = Client()
         data = {
-            "email":"",
-            "password":""
+            "email"    : "",
+            "password" : ""
         }
         response = client.post('/users/login',json.dumps(data),content_type='application/json')
 
@@ -107,8 +107,8 @@ class LoginTest(unittest.TestCase):
     def test_fail_login_email_DoesNotExist(self):
         client = Client()
         data = {
-                'email': 'fizz1@wecode.com',
-                'password': 'Qwerty123!'
+                'email'    : 'fizz1@wecode.com',
+                'password' : 'Qwerty123!'
                 }
         response = client.post('/users/login', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 404)
@@ -116,7 +116,7 @@ class LoginTest(unittest.TestCase):
     def test_fail_login_password_mismatch(self):
         client = Client()
         data = {
-                'email': 'fizz0@wecode.com',
+                'email'   : 'fizz0@wecode.com',
                 'password': 'Qwerty123!!'
                 }
         response = client.post('/users/login', json.dumps(data), content_type='application/json')
@@ -125,7 +125,7 @@ class LoginTest(unittest.TestCase):
     def test_fail_login_Key_Error(self):
         client = Client()
         data = {
-            'emake':'fizz0@wecode.com',
+            'emake'   :'fizz0@wecode.com',
             'p@ssword':'Qwerty123!'
         }
 

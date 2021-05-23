@@ -20,7 +20,7 @@ class AreaView(View):
     def get(self,request):
 
         data = [{
-            'name': area.name,
+            'name'     : area.name,
             'image_url': area.image_url,
         } for area in Area.objects.all()]
 
@@ -32,13 +32,13 @@ class RoomView(View):
         rooms    = area.room_set.all()
 
         room_list = [{
-            'name': room.name,
+            'name'     : room.name,
             'image_url': room.roomimage_set.first().image_url,
-            'city': room.city.name,
-            'district':room.district.name,
-            'grade': room.grade.name,
-            'rating': room.rating,
-            'price': room.price
+            'city'     : room.city.name,
+            'district' : room.district.name,
+            'grade'    : room.grade.name,
+            'rating'   : room.rating,
+            'price'    : room.price
         } for room in rooms]
 
         return JsonResponse(json.dumps(room_list),status=200)
@@ -63,20 +63,20 @@ class RoomDetailView(View):
         room = Room.objects.get(id=room_id)
 
         data = {
-                 'name': room.name,
-                 'rating': room.rating,
-                 'grade': room.grade,
+                 'name'       : room.name,
+                 'rating'     : room.rating,
+                 'grade'      : room.grade,
                  'description': room.description,
-                 'address': room.address,
-                 'latitude': room.latitude,
-                 'longitude': room.longitude,
-                 'category': room.category.name,
-                 'area': room.area.name,
-                 'city': room.city.name,
-                 'district': room.district.name,
-                 'price':room.price,
-                 'image_url': [image.image_url for image in room.roomimage_set.all()],
-                 'type':room.type.name
+                 'address'    : room.address,
+                 'latitude'   : room.latitude,
+                 'longitude'  : room.longitude,
+                 'category'   : room.category.name,
+                 'area'       : room.area.name,
+                 'city'       : room.city.name,
+                 'district'   : room.district.name,
+                 'price'      : room.price,
+                 'image_url'  : [image.image_url for image in room.roomimage_set.all()],
+                 'type'       : room.type.name
         }
 
         return JsonResponse({'data':data}, status=200)

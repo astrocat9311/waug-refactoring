@@ -16,12 +16,12 @@ class Command(BaseCommand):
         number = options.get('number')
 
         seeder = Seed.seeder()
-        fake = Faker(["ko_KR"])
+        fake   = Faker(["ko_KR"])
 
         seeder.add_entity(ProductOption, 20, {
-            'option': lambda x: fake.word(),
+            'option' : lambda x: fake.word(),
             'product': lambda x: random.choice(Product.objects.all()),
-            'price': fake.pydecimal(left_digits=6, right_digits=2, positive=True, min_value=1, max_value=None),
+            'price'  : fake.pydecimal(left_digits=6, right_digits=2, positive=True, min_value=1, max_value=None),
         })
         seeder.execute()
 
