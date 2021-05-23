@@ -18,7 +18,7 @@ class Command(BaseCommand):
         number = options.get('number')
 
         seeder = Seed.seeder()
-        fake = Faker(["ko_KR"])
+        fake   = Faker(["ko_KR"])
 
         seeder.add_entity(City, 30, {
             'name': lambda x: fake.city()

@@ -15,10 +15,10 @@ class Command(BaseCommand):
         number = options.get('number')
 
         seeder = Seed.seeder()
-        fake = Faker(["ko_KR"])
+        fake   = Faker(["ko_KR"])
 
         seeder.add_entity(Category, 10, {
-            'name': lambda x: fake.word(),
+            'name'     : lambda x: fake.word(),
             'image_url': lambda x: fake.image_url()
         })
         seeder.execute()

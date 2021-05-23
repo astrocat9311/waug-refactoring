@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
         seeder.add_entity(CategoryArea, 40, {
             'category': lambda x: random.choice(Category.objects.all()),
-            'area': lambda x: random.choice(Area.objects.all())
+            'area'    : lambda x: random.choice(Area.objects.all())
         })
         seeder.execute()
 

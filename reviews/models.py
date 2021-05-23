@@ -10,6 +10,7 @@ class Review(models.Model):
         db_table = 'reviews'
 
 class ReviewPhoto(models.Model):
+    objects = None
     image_url = models.URLField(max_length=2000)
     review    = models.ForeignKey('Review',on_delete=models.CASCADE)
 

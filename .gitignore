@@ -2,12 +2,14 @@
 my_settings.py
 .idea/
 utils.py
-db_upload
-
+db_upload/
+..git/
+service_types.csv
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
+*.py[cod]ß
 *$py.class
 
 # C extensions

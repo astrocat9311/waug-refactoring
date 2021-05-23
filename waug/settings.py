@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'users',
     'products',
     'reviews',
-    'tagging',
-
 ]
 
 MIDDLEWARE = [
@@ -150,5 +148,7 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
 
 )
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 
