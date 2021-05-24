@@ -20,8 +20,8 @@ class Command(BaseCommand):
         fake   = Faker(["ko_KR"])
 
         seeder.add_entity(RoomImage, 100, {
-            'image_url': lambda x: fake.image_url,
-            'room'     : random.choice(Room.objects.all())
+            'image_url': fake.image_url,
+            'room'     : lambda x: random.choice(Room.objects.all())
         })
         seeder.execute()
 

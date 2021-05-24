@@ -1,4 +1,5 @@
 import random
+
 from faker                       import Faker
 from django.core.management.base import BaseCommand
 from django_seed                 import Seed
@@ -20,8 +21,8 @@ class Command(BaseCommand):
         fake   = Faker(["ko_KR"])
 
         seeder.add_entity(ProductImage, 100, {
-            'image_url': lambda x: fake.image_url,
-            'product'  : random.choice(Product.objects.all())
+            'image_url': fake.image_url,
+            'product'  : lambda x: random.choice(Product.objects.all())
         })
         seeder.execute()
 
