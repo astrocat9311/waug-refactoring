@@ -39,7 +39,6 @@ class ReviewTest(TestCase):
             image_url = 'testing_url'
         )
 
-
        area = Area.objects.create(
 
             name      = 'test_area',
@@ -62,7 +61,6 @@ class ReviewTest(TestCase):
             name = 'test_product_type'
         )
 
-
        product = Product.objects.create(
             pk =2,
             name        = 'examination',
@@ -79,7 +77,6 @@ class ReviewTest(TestCase):
             is_popular  = 1,
             type_id     = type.pk
             )
-
 
     def tearDown(self):
         Category.objects.all().delete()

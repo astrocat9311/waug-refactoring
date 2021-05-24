@@ -128,7 +128,3 @@ class LoginTest(unittest.TestCase):
             'emake'   :'fizz0@wecode.com',
             'p@ssword':'Qwerty123!'
         }
-
-if __name__ == '__main__':
-    unittest.main()
-

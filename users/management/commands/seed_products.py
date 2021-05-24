@@ -37,4 +37,4 @@ class Command(BaseCommand):
         })
         seeder.execute()
 
-        self.stdout.write(self.style.SUCCESS('data created'))
+        self.stdout.write(self.style.SUCCESS('product data created'))

@@ -34,7 +34,7 @@ def convert_kelvin_to_celsius(k):
 
 class AreaWeatherView(View):
     def get(self,request,area_name):
-        weather_url = "http://api.openweathermap.org/data/2.5/weather"
+        weather_url = "http://api.openweathermap.org/data/2.5/forecast"
         area = Area.objects.get(name=area_name)
 
         city_name = area.name

@@ -125,7 +125,6 @@ class ProductImage(models.Model):
 
 class ProductOption(models.Model):
     option  = models.CharField(max_length=45)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
     price   = models.DecimalField(max_digits=18, decimal_places=2)
 
     class Meta:

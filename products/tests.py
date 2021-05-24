@@ -101,49 +101,49 @@ class RoomDetailTest(TestCase):
 class ProductDetailTest(TestCase):
     @classmethod
     def setUpTestData(self):
-        category1 =Category.objects.create(
-            name = 'dinning',
+        category1 = Category.objects.create(
+            name      = 'dinning',
             image_url = 'testing_url1'
         )
         category2 = Category.objects.create(
-            name='acttivity',
+            name      = 'acttivity',
             image_url = 'testing_url0'
         )
         area = Area.objects.create(
-            name='Seoul',
+            name      = 'Seoul',
             image_url = 'testing_url2'
         )
         city = City.objects.create(
             name='Seoul'
         )
         district = District.objects.create(
-            name='gangnam',
-            city=City.objects.get(name='Seoul')
+            name = 'gangnam',
+            city = City.objects.get(name='Seoul')
         )
         product_type = ProductType.objects.create(
-            name='outdoor'
+            name     = 'outdoor'
         )
         product = Product.objects.create(
-            name='hiking',
-            rating=8,
+            name        = 'hiking',
+            rating      = 8,
             description = 'this is a hiking program',
-            address = 'Seoul, gangname',
-            latitude = -78.83339100000000000,
-            longitude = -78.83339100000000000,
+            address     = 'Seoul, gangname',
+            latitude    = -78.83339100000000000,
+            longitude   = -78.83339100000000000,
             category_id = category2.pk,
-            area_id = area.pk,
-            city_id = city.pk,
+            area_id     = area.pk,
+            city_id     = city.pk,
             district_id = district.pk,
-            price=20000,
-            type_id = product_type.pk,
+            price       = 20000,
+            type_id     = product_type.pk,
             )
-        product_image1=ProductImage.objects.create(
-            image_url = 'testing_url3',
+        product_image1 = ProductImage.objects.create(
+            image_url  = 'testing_url3',
             product_id = product.pk
         )
-        product_image2=ProductImage.objects.create(
-            image_url='testing_url4',
-            product_id=product.pk
+        product_image2 = ProductImage.objects.create(
+            image_url  = 'testing_url4',
+            product_id = product.pk
         )
 
     def test_ProductDetail_Query_Success(self):

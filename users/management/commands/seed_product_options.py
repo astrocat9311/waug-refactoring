@@ -19,10 +19,9 @@ class Command(BaseCommand):
         fake   = Faker(["ko_KR"])
 
         seeder.add_entity(ProductOption, 20, {
-            'option' : lambda x: fake.word(),
-            'product': lambda x: random.choice(Product.objects.all()),
+            'option' : lambda x: fake.ean13(), ## 바코드 형식의 무작위 데이터를 생성합니다.
             'price'  : fake.pydecimal(left_digits=6, right_digits=2, positive=True, min_value=1, max_value=None),
         })
         seeder.execute()
 
-        self.stdout.write(self.style.SUCCESS('data created'))
+        self.stdout.write(self.style.SUCCESS('product_option data created'))
