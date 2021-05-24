@@ -22,8 +22,7 @@ class Command(BaseCommand):
 
         seeder.add_entity(Service, 80, {
             'name'            : lambda x: fake.word(),
-            'room'            : random.choice(Room.objects.all()),
-            'service_category': random.choice(ServiceCategory.objects.all())
+            'service_category': lambda x: random.choice(ServiceCategory.objects.all())
         })
         seeder.execute()
 

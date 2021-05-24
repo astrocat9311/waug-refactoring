@@ -39,7 +39,7 @@ class AreaWeatherView(View):
 
         city_name = area.name
         params = dict(
-            q  = city_name,
+            q     = city_name,
             appid = OPEN_WEATHER_API
         )
         sleep(1)
@@ -50,46 +50,55 @@ class AreaWeatherView(View):
         if data["cod"] == 429:
             return JsonResponse({"message":"PURCHASE_PAID_PLANS"},status=401)
 
-        data = {
-                'area' : city_name,
-                'weather'  : data["weather"][0]["main"],
-                'avg_temp' : convert_kelvin_to_celsius(data["main"]["temp"]),
-                'min_temp' : convert_kelvin_to_celsius(data["main"]["temp_min"]),
-                'max_temp' : convert_kelvin_to_celsius(data["main"]["temp_max"])
-        }
+        # 해당 코드는 당일 날씨 자료만을 보여줍니다. 위의 weather_url에서 forecast를 weather로 변경하면 됩니다.
+        #data = {
+        #        'area' : city_name,
+        #        'weather'  : data["weather"][0]["main"],
+        #        'avg_temp' : convert_kelvin_to_celsius(data["main"]["temp"]),
+        #        'min_temp' : convert_kelvin_to_celsius(data["main"]["temp_min"]),
+        #        'max_temp' : convert_kelvin_to_celsius(data["main"]["temp_max"])
+        #}
 
-        return JsonResponse({"weather_data" : data},status=200)
+        return JsonResponse({"weather_data" : response.json()},status=200)
 
 class RoomView(View):
     def get(self,request,area_id):
-        area     = Area.objects.get(id=area_id)
-        rooms    = area.room_set.all()
+        try:
+            area     = Area.objects.get(id=area_id)
+            rooms    = area.room_set.all()
 
-        room_list = [{
-            'name'     : room.name,
-            'image_url': room.roomimage_set.first().image_url,
-            'city'     : room.city.name,
-            'district' : room.district.name,
-            'grade'    : room.grade.name,
-            'rating'   : room.rating,
-            'price'    : room.price
-        } for room in rooms]
+            room_list = [{
+                'name'     : room.name,
+                'image_url': room.roomimage_set.first().image_url,
+                'city'     : room.city.name,
+                'district' : room.district.name,
+                'grade'    : room.grade,
+                'rating'   : room.rating,
+                'price'    : room.price
+            } for room in rooms]
 
-        return JsonResponse(json.dumps(room_list),status=200)
+            return JsonResponse({"data":room_list},status=200)
+
+        except:
+            return JsonResponse({"message":"NO_MATCHING_QUERY"},status=404)
 
 class ProductView(View):
     def get(self,request,area_id):
-        area = Area.objects.get(id=area_id)
-        products = area.product_set.all()
+        try:
+            area = Area.objects.get(id=area_id)
+            products = area.product_set.all()
 
-        product_list = [{
-            'name': product.name,
-            'image_url': product.productimage_set.first(),
-            'price':product.price,
-            'rating': product.rating,
-        } for product in products]
+            product_list = [{
+                'name'      : product.name,
+                'image_url' : product.productimage_set.first().image_url,
+                'price'     : product.price,
+                'rating'    : product.rating,
+            } for product in products]
 
-        return JsonResponse(json.dumps(product_list),status=200)
+            return JsonResponse({"data":product_list},status=200)
+
+        except:
+            return JsonResponse({"message":"NO_DATA"},status=404)
 
 class RoomDetailView(View):
     def get(self,request,room_id):
@@ -113,7 +122,7 @@ class RoomDetailView(View):
                  'type'       : room.type.name
         }
 
-        return JsonResponse({'data':data}, status=200)
+        return JsonResponse({"data" : data}, status=200)
 
 class ProductsDetailView(View):
     def get(self,request,product_id):

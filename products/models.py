@@ -61,10 +61,9 @@ class Room(models.Model):
     price       = models.DecimalField(max_digits=18, decimal_places=2)
     is_popular  = models.BooleanField(default=False)
     type        = models.ForeignKey('RoomType', on_delete=models.SET_NULL, null=True)
-
+    service     = models.ForeignKey('Service',on_delete=models.SET_NULL, null=True)
     class Meta:
         db_table = 'rooms'
-
 
 class ServiceCategory(models.Model):
     name = models.CharField(max_length=45)
@@ -72,15 +71,12 @@ class ServiceCategory(models.Model):
     class Meta:
         db_table = 'service_categories'
 
-
 class Service(models.Model):
     name             = models.CharField(max_length=45)
-    room             = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
     service_category = models.ForeignKey('ServiceCategory', on_delete=models.SET_NULL, null=True)
 
     class Meta:
         db_table = 'services'
-
 
 class RoomImage(models.Model):
     image_url = models.URLField(max_length=2000)
@@ -88,7 +84,6 @@ class RoomImage(models.Model):
 
     class Meta:
         db_table = 'room_images'
-
 
 class ProductType(models.Model):
     name = models.CharField(max_length=45)
@@ -111,6 +106,7 @@ class Product(models.Model):
     price        = models.DecimalField(max_digits=18, decimal_places=2)
     is_popular   = models.BooleanField(default=False)
     type         = models.ForeignKey('ProductType', on_delete=models.SET_NULL, null=True)
+    option       = models.ForeignKey('ProductOption',on_delete=models.SET_NULL,null=True)
 
     class Meta:
         db_table = 'products'
@@ -121,7 +117,6 @@ class ProductImage(models.Model):
 
     class Meta:
         db_table = 'product_images'
-
 
 class ProductOption(models.Model):
     option  = models.CharField(max_length=45)

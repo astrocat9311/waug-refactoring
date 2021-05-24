@@ -163,7 +163,6 @@ class KakaoLoginCallbackView(View):
                  is_social      = True
             ).save()
 
-
             token = jwt.encode({"email":email},SECRET_KEY,algorithm)
 
             return JsonResponse({"token":token},status=200)

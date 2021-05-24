@@ -3,7 +3,7 @@ import random
 from faker                       import Faker
 from django.core.management.base import BaseCommand
 from django_seed                 import Seed
-from products.models             import Category,City,Area,District,ProductType,Product
+from products.models             import Category,City,Area,District,ProductType,Product,ProductOption
 
 
 class Command(BaseCommand):
@@ -27,13 +27,14 @@ class Command(BaseCommand):
             'address'    : lambda x: fake.address(),
             'latitude'   : lambda x: fake.latitude(),
             'longitude'  : lambda x: fake.longitude(),
-            'category'   : random.choice(Category.objects.all()),
-            'area'       : random.choice(Area.objects.all()),
-            'city'       : random.choice(City.objects.all()),
-            'district'   : random.choice(District.objects.all()),
+            'category'   : lambda x: random.choice(Category.objects.all()),
+            'area'       : lambda x: random.choice(Area.objects.all()),
+            'city'       : lambda x: random.choice(City.objects.all()),
+            'district'   : lambda x: random.choice(District.objects.all()),
             'price'      : lambda x: fake.pydecimal(left_digits=6, right_digits=2, positive=True, min_value=1, max_value=None),
             'is_popular' : lambda x: fake.boolean(chance_of_getting_true=50),
-            'type'       : random.choice(ProductType.objects.all())
+            'type'       : lambda x: random.choice(ProductType.objects.all()),
+            'option'     : lambda x: random.choice(ProductOption.objects.all())
         })
         seeder.execute()
 

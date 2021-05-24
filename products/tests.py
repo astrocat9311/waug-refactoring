@@ -3,23 +3,20 @@ from products.models     import *
 
 client = Client()
 class CategoryTest(TestCase):
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         Category.objects.create(
-
-            name = 'hotel',
+            name      = 'hotel',
             image_url = 'category_url_testing.com'
         )
 
         Category.objects.create(
 
-            name='motel',
-            image_url='category_url_testing.com'
+            name      = 'motel',
+            image_url = 'category_url_testing.com'
         )
 
     def tearDown(self):
         Category.objects.all().delete()
-
 
     def test_Category_Query_Success(self):
         response = client.get('/products/category',)
@@ -30,7 +27,6 @@ class AreaTest(TestCase):
     @classmethod
     def setUpTestData(self):
         Area.objects.create(
-
             name='Seoul',
             image_url='testing_urls'
         )
