@@ -1,10 +1,13 @@
 import json
+import requests
 
+from time         import sleep
 from django.views import View
 from .models      import (Category,Area,City,District,RoomType,
                           Room,ServiceCategory,Service,RoomImage,
                           ProductType,Product,ProductImage,ProductOption)
 from django.http  import JsonResponse
+from my_settings  import OPEN_WEATHER_API
 
 class CategoryView(View):
     def get(self,request):
@@ -25,6 +28,37 @@ class AreaView(View):
         } for area in Area.objects.all()]
 
         return JsonResponse({'data':data},status=200)
+
+def convert_kelvin_to_celsius(k):
+        return round((k-273.15),1)
+
+class AreaWeatherView(View):
+    def get(self,request,area_name):
+        weather_url = "http://api.openweathermap.org/data/2.5/weather"
+        area = Area.objects.get(name=area_name)
+
+        city_name = area.name
+        params = dict(
+            q  = city_name,
+            appid = OPEN_WEATHER_API
+        )
+        sleep(1)
+        response = requests.get(url=weather_url, params=params)
+
+        data = response.json()
+        ### 최대 60 곳의 날씨 데이터를 무료로 보여주며, 그 이상은 유료 플랜을 구입하라는 의미 ###
+        if data["cod"] == 429:
+            return JsonResponse({"message":"PURCHASE_PAID_PLANS"},status=401)
+
+        data = {
+                'area' : city_name,
+                'weather'  : data["weather"][0]["main"],
+                'avg_temp' : convert_kelvin_to_celsius(data["main"]["temp"]),
+                'min_temp' : convert_kelvin_to_celsius(data["main"]["temp_min"]),
+                'max_temp' : convert_kelvin_to_celsius(data["main"]["temp_max"])
+        }
+
+        return JsonResponse({"weather_data" : data},status=200)
 
 class RoomView(View):
     def get(self,request,area_id):
