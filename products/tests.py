@@ -1,8 +1,13 @@
-from django.test         import (TestCase,Client)
+import json
+import unittest
+import bcrypt
+import jwt
+
+from django.test         import Client
 from products.models     import *
 
 client = Client()
-class CategoryTest(TestCase):
+class CategoryTest(unittest.TestCase):
     def setUp(self):
         Category.objects.create(
             name      = 'hotel',
@@ -23,18 +28,19 @@ class CategoryTest(TestCase):
 
         self.assertEqual(response.status_code,200)
 
-class AreaTest(TestCase):
-    @classmethod
-    def setUpTestData(self):
+class AreaTest(unittest.TestCase):
+    def setUp(self):
         Area.objects.create(
-            name='Seoul',
-            image_url='testing_urls'
+            id        = 1,
+            name      = 'Seoul',
+            image_url = 'testing_urls'
         )
         Area.objects.create(
+            id       = 2,
+            name     = 'Busan',
+            image_url='testing_urls'
+        )
 
-            name='Busan',
-            image_url='testing_urls'
-        )
     def tearDown(self):
         Area.objects.all().delete()
 
@@ -42,26 +48,30 @@ class AreaTest(TestCase):
         response = client.get('/products/area',)
         self.assertEqual(response.status_code,200)
 
-class RoomDetailTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
+class RoomDetailTest(unittest.TestCase):
+    def setUp(self):
         category = Category.objects.create(
-            name='hotel',
+            id        = 1,
+            name      = 'hotel',
             image_url = 'test_url1'
         )
         area = Area.objects.create(
-            name = 'busan',
+            id        = 1,
+            name      = 'busan',
             image_url = 'test_url2'
         )
         city = City.objects.create(
+            id =1,
             name='busan'
         )
         district = District.objects.create(
-            name='haeundae',
-            city_id = city.pk
+            id      = 1,
+            name    = 'haeundae',
+            city_id = city.id
         )
         room_type = RoomType.objects.create(
-            name = '2rooms'
+            id   = 1,
+            name = 'hostel'
         )
 
         room = Room.objects.create(

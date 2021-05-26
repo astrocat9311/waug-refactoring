@@ -3,7 +3,7 @@ import unittest
 import bcrypt
 import jwt
 
-from django.test import (TestCase,Client)
+from django.test import Client
 from .models     import User
 from my_settings import SECRET_KEY, algorithm
 
