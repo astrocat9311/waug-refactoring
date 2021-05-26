@@ -28,13 +28,14 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     '13.125.165.231',
-    '13.125.165.231:8000'
+    '13.125.165.231:8000',
+    'waug-cloning-project.ccyeiwtd1d1m.ap-northeast-2.rds.amazonaws.com',
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.admin',
+    #'django.contrib.admin',ß
     #'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
