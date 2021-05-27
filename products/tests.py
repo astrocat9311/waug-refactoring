@@ -1,45 +1,37 @@
 import json
-import unittest
-import bcrypt
-import jwt
 
-from django.test         import Client
+from django.test         import TestCase,Client
 from products.models     import *
 
 client = Client()
-class CategoryTest(unittest.TestCase):
+
+class CategoryTest(TestCase):
     def setUp(self):
-        Category.objects.create(
-            name      = 'hotel',
-            image_url = 'category_url_testing.com'
-        )
-
-        Category.objects.create(
-
-            name      = 'motel',
-            image_url = 'category_url_testing.com'
-        )
+        Category.objects.bulk_create([
+            Category(name= 'category1',image_url = 'category1.jpg'),
+            Category(name= 'category2',image_url = 'category2.jpg')
+        ])
 
     def tearDown(self):
         Category.objects.all().delete()
 
     def test_Category_Query_Success(self):
-        response = client.get('/products/category',)
+        response = client.get('/products/category')
 
         self.assertEqual(response.status_code,200)
+        self.assertEqual(response.json(),{'data': [
+            {'name': 'category1', 'image_url': 'category1.jpg'},
+            {'name': 'category2', 'image_url': 'category2.jpg'}
+                ]
+            }
+        )
 
-class AreaTest(unittest.TestCase):
+class AreaTest(TestCase):
     def setUp(self):
-        Area.objects.create(
-            id        = 1,
-            name      = 'Seoul',
-            image_url = 'testing_urls'
-        )
-        Area.objects.create(
-            id       = 2,
-            name     = 'Busan',
-            image_url='testing_urls'
-        )
+        Area.objects.bulk_create([
+            Area(name='area1',image_url='area1.jpg'),
+            Area(name='area2',image_url='area2.jpg')
+            ])
 
     def tearDown(self):
         Area.objects.all().delete()
@@ -48,109 +40,110 @@ class AreaTest(unittest.TestCase):
         response = client.get('/products/area',)
         self.assertEqual(response.status_code,200)
 
-class RoomDetailTest(unittest.TestCase):
+class RoomDetailTest(TestCase):
     def setUp(self):
         category = Category.objects.create(
-            id        = 1,
-            name      = 'hotel',
-            image_url = 'test_url1'
+            name      = 'category1',
+            image_url = 'category1.jpg'
         )
         area = Area.objects.create(
-            id        = 1,
-            name      = 'busan',
-            image_url = 'test_url2'
+            name      = 'area1',
+            image_url = 'area1.jpg'
         )
         city = City.objects.create(
-            id =1,
-            name='busan'
+            name='city1'
         )
         district = District.objects.create(
-            id      = 1,
-            name    = 'haeundae',
-            city_id = city.id
+            name = 'district1',
+            city = city
         )
         room_type = RoomType.objects.create(
-            id   = 1,
-            name = 'hostel'
+            name = 'roomtype1'
         )
 
         room = Room.objects.create(
-            name = 'BusanHotel',
-            rating = 8,
-            grade = 5,
-            description = 'this is Busan Hotel',
-            address = 'busan, haeundae',
-            latitude = -78.83339100000000000,
-            longitude = -96.62125200000000000,
-            category_id = category.pk,
-            area_id = area.pk,
-            city_id = city.pk,
-            district_id = district.pk,
-            price = 100000,
-            type_id = room_type.pk
+            name        = 'room1',
+            rating      = 8,
+            grade       = 5,
+            description = 'this is room1',
+            address     = 'busan, haeundae',
+            latitude    = -78.83339100000000000,
+            longitude   = -96.62125200000000000,
+            category    = category,
+            area        = area,
+            city        = city,
+            district    = district,
+            price       = 100000,
+            type        = room_type
         )
 
         room_image1 = RoomImage.objects.create(
-            image_url = 'test_url_3',
-            room_id = room.pk
+            image_url = 'RoomImage1.jpg',
+            room = room
         )
 
         room_image2 = RoomImage.objects.create(
-            image_url = 'test_url_4',
-            room_id = room.pk
+            image_url = 'RoomImage2.jpg',
+            room = room
             )
+    def tearDown(self):
+        Category.objects.all().delete()
+        Area.objects.all().delete()
+        City.objects.all().delete()
+        District.objects.all().delete()
+        RoomType.objects.all().delete()
+        Room.objects.all().delete()
+        RoomImage.objects.all().delete()
+
 
     def test_RoomDetail_Query_Success(self):
         response = client.get('/products/room/1')
         self.assertEqual(response.status_code,200)
 
 class ProductDetailTest(TestCase):
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         category1 = Category.objects.create(
-            name      = 'dinning',
-            image_url = 'testing_url1'
+            name      = 'category1',
+            image_url = 'category1.jpg'
         )
         category2 = Category.objects.create(
-            name      = 'acttivity',
-            image_url = 'testing_url0'
+            name      = 'category2',
+            image_url = 'category2.jpg'
         )
         area = Area.objects.create(
-            name      = 'Seoul',
-            image_url = 'testing_url2'
+            name      = 'area1',
+            image_url = 'area1.jpg'
         )
         city = City.objects.create(
-            name='Seoul'
+            name='city'
         )
         district = District.objects.create(
-            name = 'gangnam',
-            city = City.objects.get(name='Seoul')
+            name = 'district',
+            city = city
         )
         product_type = ProductType.objects.create(
-            name     = 'outdoor'
+            name     = 'product_type'
         )
         product = Product.objects.create(
-            name        = 'hiking',
+            name        = 'product1',
             rating      = 8,
-            description = 'this is a hiking program',
-            address     = 'Seoul, gangname',
+            description = 'this is a product1',
+            address     = 'address',
             latitude    = -78.83339100000000000,
             longitude   = -78.83339100000000000,
-            category_id = category2.pk,
-            area_id     = area.pk,
-            city_id     = city.pk,
-            district_id = district.pk,
+            category    = category1,
+            area        = area,
+            city        = city,
+            district    = district,
             price       = 20000,
-            type_id     = product_type.pk,
+            type        = product_type,
             )
-        product_image1 = ProductImage.objects.create(
-            image_url  = 'testing_url3',
-            product_id = product.pk
-        )
-        product_image2 = ProductImage.objects.create(
-            image_url  = 'testing_url4',
-            product_id = product.pk
-        )
+        product_images = ProductImage.objects.bulk_create([
+            ProductImage(image_url='product_image1.jpg',product=product),
+            ProductImage(image_url='product_image2.jpg',product=product)
+        ])
+    def tearDown(self):
+        pass
 
     def test_ProductDetail_Query_Success(self):
         response = client.get('/products/goods/1')

@@ -1,14 +1,14 @@
 import json
-import unittest
 import bcrypt
 import jwt
 
-from django.test import Client
+from django.test import TestCase,Client
 from .models     import User
 from my_settings import SECRET_KEY, algorithm
 
 client =Client()
-class SignUpTest(unittest.TestCase):
+
+class SignUpTest(TestCase):
     def setUp(self):
         pass
 
@@ -68,7 +68,7 @@ class SignUpTest(unittest.TestCase):
         response = client.post('/users/signup',json.dumps(data),content_type='application/json')
         self.assertEqual(response.status_code,400)
 
-class LoginTest(unittest.TestCase):
+class LoginTest(TestCase):
     def setUp(self):
         User.objects.create(
                 email    = 'login@wecode.com',
