@@ -147,4 +147,4 @@ class ProductDetailTest(TestCase):
 
     def test_ProductDetail_Query_Success(self):
         response = client.get('/products/goods/1')
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
