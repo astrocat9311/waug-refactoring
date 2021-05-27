@@ -11,23 +11,29 @@ from my_settings  import OPEN_WEATHER_API
 
 class CategoryView(View):
     def get(self,request):
+        try:
+            data = [{
+                'name'     : category.name,
+                'image_url': category.image_url
+            } for category in Category.objects.all()]
 
-       data = [{
-           'name'     : category.name,
-           'image_url': category.image_url
-       } for category in Category.objects.all()]
+            return JsonResponse({'data':data},status=200)
 
-       return JsonResponse({'data':data},status=200)
+        except Exception:
+            return JsonResponse({'message':'matching_category_not_exists'},status=404)
 
 class AreaView(View):
     def get(self,request):
+        try:
+            data = [{
+                'name'     : area.name,
+                'image_url': area.image_url,
+            } for area in Area.objects.all()]
+            return JsonResponse({'data':data},status=200)
 
-        data = [{
-            'name'     : area.name,
-            'image_url': area.image_url,
-        } for area in Area.objects.all()]
+        except Exception:
+            return JsonResponse({'message':'matching_area_not_exists'},status=404)
 
-        return JsonResponse({'data':data},status=200)
 
 def convert_kelvin_to_celsius(k):
         return round((k-273.15),1)
