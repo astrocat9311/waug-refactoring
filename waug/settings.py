@@ -27,6 +27,8 @@ SECRET_KEY = SECRET_KEY
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
     '13.125.165.231',
     '13.125.165.231:8000',
     'waug-cloning-project.ccyeiwtd1d1m.ap-northeast-2.rds.amazonaws.com',
@@ -103,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -116,7 +117,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

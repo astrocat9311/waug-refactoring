@@ -1,13 +1,10 @@
 import json
-import unittest
-import bcrypt
-import jwt
 
-from django.test         import Client
+from django.test         import TestCase,Client
 from products.models     import *
 
 client = Client()
-class CategoryTest(unittest.TestCase):
+class CategoryTest(TestCase):
     def setUp(self):
         Category.objects.create(
             name      = 'hotel',
@@ -28,7 +25,7 @@ class CategoryTest(unittest.TestCase):
 
         self.assertEqual(response.status_code,200)
 
-class AreaTest(unittest.TestCase):
+class AreaTest(TestCase):
     def setUp(self):
         Area.objects.create(
             id        = 1,
@@ -48,7 +45,7 @@ class AreaTest(unittest.TestCase):
         response = client.get('/products/area',)
         self.assertEqual(response.status_code,200)
 
-class RoomDetailTest(unittest.TestCase):
+class RoomDetailTest(TestCase):
     def setUp(self):
         category = Category.objects.create(
             id        = 1,
@@ -105,8 +102,7 @@ class RoomDetailTest(unittest.TestCase):
         self.assertEqual(response.status_code,200)
 
 class ProductDetailTest(TestCase):
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         category1 = Category.objects.create(
             name      = 'dinning',
             image_url = 'testing_url1'
@@ -133,7 +129,7 @@ class ProductDetailTest(TestCase):
             name        = 'hiking',
             rating      = 8,
             description = 'this is a hiking program',
-            address     = 'Seoul, gangname',
+            address     = 'Seoul, gangnam',
             latitude    = -78.83339100000000000,
             longitude   = -78.83339100000000000,
             category_id = category2.pk,
@@ -154,4 +150,4 @@ class ProductDetailTest(TestCase):
 
     def test_ProductDetail_Query_Success(self):
         response = client.get('/products/goods/1')
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
