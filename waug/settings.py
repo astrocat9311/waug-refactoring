@@ -29,8 +29,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '13.125.165.231',
-    '13.125.165.231:8000',
+    '52.79.154.174',
+    '52.79.154.174:8000',
     'waug-cloning-project.ccyeiwtd1d1m.ap-northeast-2.rds.amazonaws.com',
 ]
 
